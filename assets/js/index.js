@@ -1,5 +1,5 @@
 $(function() {
-    getUserInfo()
+
     var layer = layui.layer
         // 点击按钮，实现退出功能
     $('#btnLogout').on('click', function() {
@@ -25,35 +25,35 @@ $(function() {
         //     }
 
     // }
-})
+    getUserInfo()
 
-
-function getUserInfo() {
-    $.ajax({
-        method: 'GET',
-        url: '/my/userinfo',
-        headers: {
-            Authorization: localStorage.getItem('token') || '',
-        },
-        success: function(res) {
-            if (res.status !== 0) {
-                return layer.msg('获取用户信息失败')
+    function getUserInfo() {
+        $.ajax({
+            method: 'GET',
+            url: '/my/userinfo',
+            headers: {
+                Authorization: localStorage.getItem('token') || '',
+            },
+            success: function(res) {
+                if (res.status !== 0) {
+                    return layer.msg('获取用户信息失败')
+                }
+                // 调用renderAvater渲染用户的头像
+                renderAvatar(res.data)
             }
-            // 调用renderAvater渲染用户的头像
-            renderAvatar(res.data)
-        }
-    })
-}
-//渲染用户头像
-function renderAvatar(user) {
-    var name = user.nickname || user.username
-    $('#welcome').html('欢迎&nbsp;&nbsp;' + name)
-    if (user.user_pic !== null) {
-        $('.layui-nav-img').attr('scr', user_pic).show()
-        $('.text-avatar').hide()
-    } else {
-        $('.layui-nav-img').hide()
-        var frist = name[0].toUpperCase()
-        $('.text-avatar').html(frist).show
+        })
     }
-}
+    //渲染用户头像
+    function renderAvatar(user) {
+        var name = user.nickname || user.username
+        $('#welcome').html('欢迎&nbsp;&nbsp;' + name)
+        if (user.user_pic !== null) {
+            $('.layui-nav-img').attr('scr', 'user_pic').show()
+            $('.text-avatar').hide()
+        } else {
+            $('.layui-nav-img').hide()
+            var frist = name[0].toUpperCase()
+            $('.text-avatar').html(frist).show
+        }
+    }
+})
